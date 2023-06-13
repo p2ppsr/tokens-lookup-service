@@ -76,7 +76,8 @@ class TokensLookupService {
       e.code = 'ERR_INVALID_QUERY'
       throw e
     }
-    if (query.txid && query.vout) {
+    if (typeof query.txid !== 'undefined' &&
+      typeof query.vout !== 'undefined') {
       return await this.storageEngine.findByTxidVout({
         txid: query.txid,
         vout: query.vout
@@ -84,7 +85,7 @@ class TokensLookupService {
     } else if (query.findAll === 'true') {
       return await this.storageEngine.findAll()
     } else {
-      const e = new Error('Query parameters must include a valid Identity Key, Title, Artist Name, Song ID, or Display all!')
+      const e = new Error('Query parameters must include either a txid + vout or "findAll = \'true\'".')
       e.code = 'ERR_INSUFFICIENT_QUERY_PARAMS'
       throw e
     }
